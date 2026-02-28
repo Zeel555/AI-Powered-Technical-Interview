@@ -1,166 +1,273 @@
+# 🚀 AI-Powered-Technical-Interview
 
-# 🧠 AI-Powered Technical Interview Prepper
+An AI-driven full-stack web application designed to simulate real-world technical interviews.  
+The system dynamically generates interview questions and evaluates user responses using a locally hosted Large Language Model (LLM).
 
-A full-stack application designed to simulate real-world technical interviews. It allows users to practice answering conceptual and coding questions verbally and programmatically, receiving instant, AI-driven feedback on their performance.
-
-## ✨ Key Features
-
-* **Customizable Interviews**: Select Role (MERN, Python, Data Science), Difficulty Level, and Interview Type (Oral vs. Coding Mix).
-* **Hybrid Input System**:
-* **🎙️ Voice Response**: Uses **OpenAI Whisper** to transcribe verbal answers for conceptual questions.
-* **💻 Code Editor**: Integrated **Monaco Editor** for solving coding challenges directly in the browser.
-
-
-* **AI Microservice Architecture**:
-* **Question Generation**: dynamically creates unique interview questions using **Ollama (Mistral)**.
-* **Smart Evaluation**: Analyzes both code logic and verbal transcription to provide a **Technical Score** and **Confidence Score**.
-
-
-* **Detailed Analytics**:
-* Session history with global scores.
-* Per-question breakdown showing user submission vs. ideal implementation.
-* Performance charts using **Chart.js**.
-
-
-* **Secure Authentication**: JWT-based user login and registration.
+This project demonstrates the integration of modern AI systems within a scalable MERN-based architecture.
 
 ---
 
-## 🛠️ Tech Stack
+## 🎯 Project Objective
 
-### **Frontend**
+Technical interviews require both conceptual clarity and problem-solving ability.  
+This platform provides an interactive environment where users can:
 
-* **Framework**: React (Vite)
-* **State Management**: Redux Toolkit
-* **Styling**: Tailwind CSS
-* **Editor**: `@monaco-editor/react`
-* **Visualization**: Chart.js / React-Chartjs-2
-* **Routing**: React Router Dom
+- Practice coding interviews
+- Attempt conceptual questions
+- Submit voice-based answers
+- Receive structured AI feedback
+- Track performance analytics over time
 
-### **Backend (API Gateway)**
-
-* **Runtime**: Node.js
-* **Framework**: Express.js
-* **Database**: MongoDB (Mongoose)
-* **Authentication**: JSON Web Tokens (JWT) & bcryptjs
-
-### **AI Microservice**
-
-* **Runtime**: Python 3.9+
-* **Framework**: FastAPI
-* **LLM Engine**: Ollama (running `mistral` locally)
-* **Speech-to-Text**: OpenAI Whisper (`base.en` model)
-* **Audio Processing**: PyDub / FFMPEG
+The application is built using a microservice-inspired architecture to isolate AI computation from the core backend.
 
 ---
 
-## 🚀 Getting Started
+## 🏗️ System Architecture
 
-### Prerequisites
+The system is divided into three major layers:
 
-1. **Node.js** (v16+) and **npm**.
-2. **Python** (v3.9+) and **pip**.
-3. **MongoDB**: Local instance or Atlas URI.
-4. **Ollama**: Installed and running locally.
-* Install from [ollama.com](https://ollama.com).
-* Pull the model: `ollama pull mistral`.
+### 1️⃣ Frontend (React + Vite)
 
+Responsible for:
+- Interview UI
+- Code editor integration (Monaco)
+- Audio recording
+- Performance visualization
+- Authentication handling
 
-5. **FFmpeg**: Required for audio processing (should be in your system PATH).
+The frontend communicates with the Node.js backend via REST APIs.
 
-### 1. Clone the Repository
+---
+
+### 2️⃣ Backend API (Node.js + Express)
+
+Acts as the **API Gateway**.
+
+Responsibilities:
+- User authentication (JWT)
+- Password hashing (bcrypt)
+- Session storage in MongoDB
+- Request validation
+- Forwarding AI-related requests to the Python microservice
+
+The backend does NOT perform heavy AI computation.
+
+---
+
+### 3️⃣ AI Microservice (FastAPI - Python)
+
+Handles all AI-related operations:
+
+- Dynamic question generation
+- Evaluation of coding answers
+- Analysis of conceptual responses
+- Speech-to-text processing
+- Interaction with the local LLM
+
+This separation improves scalability and maintainability.
+
+---
+
+### 4️⃣ Local LLM Engine (Ollama - Mistral Model)
+
+The system uses Ollama to run the Mistral model locally.
+
+Why local LLM?
+
+- No external API cost
+- Offline capability
+- Data privacy
+- Full control over model usage
+
+The AI microservice communicates with Ollama through REST calls.
+
+---
+
+## 🔄 Data Flow Overview
+
+User → React Frontend  
+⬇  
+Node.js Backend (Authentication + DB)  
+⬇  
+Python FastAPI Service  
+⬇  
+Ollama (Mistral LLM)  
+⬆  
+AI Response → Stored in MongoDB → Displayed in UI  
+
+---
+
+## ✨ Core Features
+
+### 🔹 Role-Based Interview Configuration
+Users can select:
+- Domain (MERN, Python, Data Science, etc.)
+- Difficulty level
+- Interview type (Coding / Conceptual / Mixed)
+
+---
+
+### 🔹 Coding Interview Mode
+- Integrated Monaco Editor
+- Users write and submit code
+- AI evaluates logic and structure
+- Generates detailed feedback
+
+---
+
+### 🔹 Conceptual Interview Mode
+- Text-based answers supported
+- Voice-based answers supported
+- Speech converted using Whisper
+- AI evaluates understanding and clarity
+
+---
+
+### 🔹 AI Evaluation Metrics
+The system provides:
+- Technical Score
+- Confidence Score
+- Improvement Suggestions
+- Structured feedback output
+
+---
+
+### 🔹 Analytics Dashboard
+- Interview session history
+- Score breakdown per question
+- Performance visualization using Chart.js
+- Progress tracking
+
+---
+
+### 🔐 Secure Authentication
+- JWT-based authentication
+- Encrypted password storage (bcrypt)
+- Protected routes
+- Environment-based configuration
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+- React (Vite)
+- Redux Toolkit
+- Tailwind CSS
+- Monaco Editor
+- Chart.js
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+
+### AI Microservice
+- Python 3.9+
+- FastAPI
+- Ollama (Mistral LLM)
+- OpenAI Whisper
+- FFmpeg (audio preprocessing)
+
+---
+
+## 🚀 Installation Guide
+
+### 🔧 Prerequisites
+
+Make sure you have:
+
+- Node.js (v16+)
+- Python (v3.9+)
+- MongoDB (local or Atlas)
+- Ollama installed locally
+- FFmpeg added to system PATH
+
+---
+
+### 🧠 Step 1 — Start LLM
 
 ```bash
-git clone https://github.com/siddhantsaxenaofficial/ai-interviewer.git
-cd ai-interviewer
+ollama pull mistral
+ollama serve
 
-```
+## Step 2 — Start AI Microservice
 
-### 2. Backend Setup (Node.js)
-
-```bash
-cd backend
-npm install
-
-# Create a .env file
-echo "PORT=5000" > .env
-echo "MONGO_URI=your_mongodb_connection_string" >> .env
-echo "JWT_SECRET=your_jwt_secret" >> .env
-echo "NODE_ENV=development" >> .env
-
-# Run the server
-npm run server
-
-```
-
-### 3. AI Service Setup (Python)
-
-```bash
-cd ../ai_service
-
-# Create virtual environment
+cd ai-service
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install fastapi uvicorn ollama openai-whisper pydub python-dotenv
-
-# Create a .env file
-echo "AI_SERVICE_PORT=8000" > .env
-echo "OLLAMA_MODEL_NAME=mistral" >> .env
-
-# Run the microservice
+venv\Scripts\activate
+pip install fastapi uvicorn ollama openai-whisper pydub python-dotenv python-multipart
 uvicorn main:app --reload --port 8000
 
-```
+## Step 3 — Start Backend
 
-### 4. Frontend Setup (React)
-
-```bash
-cd ../frontend
+cd backend
 npm install
+node server.js
 
-# Create a .env file
-echo "VITE_API_URL=http://localhost:5000/api" > .env
+## Step 4 — Start Frontend
 
-# Run the frontend
+cd frontend
+npm install
 npm run dev
 
-```
-### or shortcut
+## 🔐 Environment Variables Setup
 
-```
-CLICK ON FOR-FIRST-TIME.BAT FILE AND RUN
-
-```
----
-
-## 📐 Architecture Overview
-
-The application follows a microservices-inspired architecture to separate heavy AI processing from the main application logic.
-
-1. **Client (React)**: Handles UI, Audio Recording, and Code Editing. Sends data to Node.js.
-2. **Node.js Server**: Acts as the API Gateway. Handles Auth, Database storage, and forwards AI tasks to the Python service.
-3. **Python Service**:
-* Receives `POST /generate-questions`.
-* Receives `POST /transcribe` (Audio -> Text).
-* Receives `POST /evaluate` (Text/Code -> Score/Feedback JSON).
-
-
-4. **Ollama**: The local LLM engine that powers the generation and evaluation logic.
+This project requires environment variables for proper configuration.  
+Create a `.env` file inside the respective folders as described below.
 
 ---
 
-## 🤝 Contributing
+### 📁 Backend (.env inside `/backend` folder)
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+Create a file:
+backend/.env
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
-## 📄 License
+Add the following:
 
-Distributed under the MIT License. See `LICENSE` for more information.
+```env
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/ai_interview_db
+JWT_SECRET=your_super_secure_jwt_secret_key
+NODE_ENV=development
+AI_SERVICE_URL=http://127.0.0.1:8000
+🔎 Variable Explanation
+
+PORT → Port on which the backend server runs
+
+MONGO_URI → MongoDB connection string (local or Atlas)
+
+JWT_SECRET → Secret key used to sign authentication tokens
+
+NODE_ENV → Environment mode (development / production)
+
+AI_SERVICE_URL → URL of the Python AI microservice
+
+## AI Microservice (.env inside /ai-service folder)
+
+Create:
+
+ai-service/.env
+
+Add:
+
+AI_SERVICE_PORT=8000
+OLLAMA_MODEL_NAME=mistral
+🔎 Variable Explanation
+
+AI_SERVICE_PORT → Port for FastAPI service
+
+OLLAMA_MODEL_NAME → Local LLM model name (default: mistral)
+
+## Frontend (.env inside /frontend folder)
+
+Create:
+
+frontend/.env
+
+Add:
+
+VITE_API_URL=http://localhost:5000/api
